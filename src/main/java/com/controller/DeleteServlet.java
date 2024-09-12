@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/SaveProductServlet")
-public class SaveProductServlet extends HttpServlet{
+@WebServlet("/DeleteServlet")
+public class DeleteServlet extends HttpServlet{
 	
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -21,9 +21,9 @@ public class SaveProductServlet extends HttpServlet{
 		//Read Data First
 		
 		String productName = request.getParameter("productName");
-		Integer price =	Integer.parseInt(request.getParameter("price"));
+		String price =	request.getParameter("price");
 		String category = request.getParameter("category");
-		Integer qty = Integer.parseInt(request.getParameter("qty"));
+		String qty = request.getParameter("qty");
 		
 		//Validation >> Filter 1
 		
@@ -42,18 +42,16 @@ public class SaveProductServlet extends HttpServlet{
 			
 			Connection conn = DriverManager.getConnection(connectionUrl, userName, password);
 			
-			PreparedStatement pstmt = conn.prepareStatement("insert into products(productName,price,category,qty)values(?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("Delete from products where productName = ?");
 			
 			pstmt.setString(1, productName);
-			pstmt.setInt(2, price);
-			pstmt.setString(3, category);
-			pstmt.setInt(4, qty);
+			
+			int rs = pstmt.executeUpdate();
+			
+			System.out.println(rs+ " rows affected");
 			
 			
-			pstmt.executeUpdate();
-			
-			
-			
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
